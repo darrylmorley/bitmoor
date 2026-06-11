@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bitmoor Ltd - Software Development</title>
-  <meta name="description" content="Bitmoor Ltd is a software development company registered in England and Wales. Company number 17133695.">
+  <title>Bitmoor Ltd · Backend, APIs, Ecommerce</title>
+  <meta name="description" content="Bitmoor Ltd builds backend systems, APIs, ecommerce platforms and payment integrations in TypeScript, Laravel and Go. Registered in England and Wales, company number 17133695.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -16,243 +16,564 @@
     }
 
     :root {
-      --color-text: #f0f0f0;
-      --color-text-muted: #9ca3af;
-      --color-bg: #0a0a0a;
-      --color-surface: #141414;
-      --color-border: #252525;
-      --color-accent: #3b82f6;
-      --color-accent-glow: rgba(59, 130, 246, 0.15);
+      --bg: #0c0b09;
+      --surface: #131210;
+      --line: #26241f;
+      --line-strong: #3a372f;
+      --text: #ece9e2;
+      --muted: #8d897e;
+      --faint: #57534a;
+      --accent: #ff5c1f;
+      --accent-dim: rgba(255, 92, 31, 0.12);
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
+      --sans: 'Archivo', -apple-system, sans-serif;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--color-text);
-      background: var(--color-bg);
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
+      /* blueprint grid backdrop */
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 72px 72px;
+      background-position: center top;
     }
 
-    .page {
+    .frame {
+      max-width: 1080px;
+      margin: 0 auto;
+      border-left: 1px solid var(--line-strong);
+      border-right: 1px solid var(--line-strong);
+      background: var(--bg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 32px;
-      width: 100%;
+    .pad {
+      padding-left: clamp(24px, 5vw, 64px);
+      padding-right: clamp(24px, 5vw, 64px);
     }
 
+    /* ---- mono label, used everywhere ---- */
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tag .idx {
+      color: var(--accent);
+    }
+
+    /* ---- header ---- */
     header {
-      padding: 40px 0;
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .header-inner {
+      border-bottom: 1px solid var(--line-strong);
+      padding-top: 20px;
+      padding-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
     }
 
     .logo img {
-      height: 36px;
+      /* the PNG has heavy transparent padding, oversize and pull it back in */
+      height: 72px;
       width: auto;
-      filter: brightness(0) invert(1) opacity(0.9);
+      display: block;
+      margin: -18px 0;
+      filter: brightness(0) invert(0.93);
     }
 
-    .header-link {
-      font-size: 14px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .header-link:hover {
-      color: var(--color-accent);
-    }
-
-    .hero {
-      padding: 64px 0;
+    header nav {
       display: flex;
-      justify-content: center;
+      gap: 28px;
     }
 
-    .hero img {
-      width: 280px;
-      height: auto;
-      filter: brightness(0) invert(1) opacity(0.9);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      padding-bottom: 64px;
-    }
-
-    .card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 12px;
-      padding: 28px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .card:hover {
-      border-color: #333;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    .card-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
+    header nav a {
+      font-family: var(--mono);
+      font-size: 12px;
       letter-spacing: 0.08em;
-      color: var(--color-accent);
-      margin-bottom: 12px;
-    }
-
-    .card p {
-      font-size: 15px;
-      color: var(--color-text);
-      line-height: 1.6;
-    }
-
-    .card a {
-      color: var(--color-text);
+      text-transform: uppercase;
+      color: var(--muted);
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color 0.15s;
     }
 
-    .card a:hover {
-      color: var(--color-accent);
+    header nav a:hover {
+      color: var(--accent);
     }
 
-    .card-full {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, var(--color-surface) 0%, rgba(59, 130, 246, 0.05) 100%);
+    /* ---- hero ---- */
+    .hero {
+      padding-top: clamp(72px, 12vh, 140px);
+      padding-bottom: clamp(56px, 9vh, 110px);
+      border-bottom: 1px solid var(--line-strong);
+      position: relative;
+      overflow: hidden;
     }
 
-    .status {
+    .hero::after {
+      /* crosshair marker, top right */
+      content: '+';
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      font-family: var(--mono);
+      color: var(--faint);
+      font-size: 18px;
+    }
+
+    .hero .tag {
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 7.2vw, 84px);
+      font-weight: 900;
+      line-height: 0.98;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      max-width: 14ch;
+    }
+
+    .hero h1 .accent {
+      color: var(--accent);
+    }
+
+    .hero p {
+      margin-top: 32px;
+      max-width: 52ch;
+      font-size: 17px;
+      color: var(--muted);
+    }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 32px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--faint);
+      letter-spacing: 0.06em;
+    }
+
+    .hero-meta .live {
+      color: var(--muted);
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
-      color: var(--color-text-muted);
-      margin-top: 8px;
     }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
+    .dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+      background: #36c46a;
+      box-shadow: 0 0 10px rgba(54, 196, 106, 0.6);
+      animation: pulse 2.4s ease-in-out infinite;
     }
 
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    /* ---- section shell ---- */
+    section {
+      border-bottom: 1px solid var(--line-strong);
+    }
+
+    .section-head {
+      padding-top: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .section-head .hint {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    /* ---- services ---- */
+    .services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .service {
+      padding: clamp(28px, 4vw, 44px) clamp(24px, 5vw, 64px);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .service:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+
+    .service:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    .service::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .service:hover::before {
+      width: 100%;
+    }
+
+    .service .num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .service h3 {
+      margin-top: 14px;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .service p {
+      margin-top: 10px;
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    .service .tools {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tools span {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--line-strong);
+      padding: 3px 9px;
+      border-radius: 2px;
+    }
+
+    /* ---- stack strip ---- */
+    .strip {
+      padding-top: 18px;
+      padding-bottom: 18px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--faint);
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .strip b {
+      color: var(--accent);
+      font-weight: 400;
+      margin: 0 6px;
+    }
+
+    /* ---- work ---- */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .work {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: clamp(32px, 4.5vw, 52px) clamp(24px, 5vw, 64px);
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .work:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .work:hover {
+      background: var(--accent-dim);
+    }
+
+    .work .arrow {
+      position: absolute;
+      top: 28px;
+      right: 28px;
+      font-family: var(--mono);
+      font-size: 16px;
+      color: var(--faint);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .work:hover .arrow {
+      color: var(--accent);
+      transform: translate(3px, -3px);
+    }
+
+    .work h3 {
+      font-size: 26px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-top: 14px;
+    }
+
+    .work p {
+      margin-top: 10px;
+      font-size: 14.5px;
+      color: var(--muted);
+      max-width: 40ch;
+    }
+
+    .work .url {
+      margin-top: 22px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- contact ---- */
+    .contact {
+      padding-top: clamp(64px, 10vh, 120px);
+      padding-bottom: clamp(64px, 10vh, 120px);
+      text-align: left;
+    }
+
+    .contact h2 {
+      font-size: clamp(30px, 4.6vw, 52px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      max-width: 20ch;
+    }
+
+    .contact a.cta {
+      display: inline-block;
+      margin-top: 36px;
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      color: var(--bg);
+      background: var(--accent);
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 2px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .contact a.cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255, 92, 31, 0.35);
+    }
+
+    /* ---- footer ---- */
     footer {
       margin-top: auto;
-      padding: 24px 0 32px;
-      border-top: 1px solid var(--color-border);
-    }
-
-    .footer-inner {
+      padding-top: 28px;
+      padding-bottom: 36px;
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 32px;
       justify-content: space-between;
-    }
-
-    footer p {
-      font-size: 12px;
-      color: #555;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--faint);
+      letter-spacing: 0.04em;
     }
 
     footer a {
-      font-size: 12px;
-      color: #555;
+      color: var(--faint);
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color 0.15s;
     }
 
     footer a:hover {
-      color: var(--color-text-muted);
+      color: var(--accent);
     }
 
-    @media (max-width: 540px) {
-      .hero h1 {
-        font-size: 36px;
-      }
+    /* ---- load-in reveal ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: rise 0.6s ease forwards;
+    }
 
-      .cards {
+    .reveal.d1 { animation-delay: 0.08s; }
+    .reveal.d2 { animation-delay: 0.18s; }
+    .reveal.d3 { animation-delay: 0.3s; }
+
+    @keyframes rise {
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { animation: none; opacity: 1; transform: none; }
+      .dot { animation: none; }
+    }
+
+    @media (max-width: 680px) {
+      .services, .work-grid {
         grid-template-columns: 1fr;
       }
 
-      .card-full {
-        grid-column: auto;
+      .service:nth-child(odd), .work:first-child {
+        border-right: none;
       }
 
-      .footer-inner {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
+      .service:nth-last-child(2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .work:first-child {
+        border-bottom: 1px solid var(--line);
+      }
+
+      header nav {
+        gap: 18px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="container">
-        <div class="header-inner">
-          <div class="logo"><img src="logo.png" alt="Bitmoor"></div>
-          <a href="mailto:hello@bitmoor.co.uk" class="header-link">hello@bitmoor.co.uk</a>
-        </div>
-      </div>
+  <div class="frame">
+    <header class="pad">
+      <a class="logo" href="#"><img src="logo.png" alt="Bitmoor"></a>
+      <nav>
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="mailto:hello@bitmoor.co.uk">Contact</a>
+      </nav>
     </header>
 
     <main>
-      <div class="container">
-        <div class="hero">
-          <img src="logo.png" alt="Bitmoor Ltd - Software Development">
-        </div>
-
-        <div class="cards">
-          <div class="card">
-            <div class="card-label">Contact</div>
-            <p><a href="mailto:hello@bitmoor.co.uk">hello@bitmoor.co.uk</a></p>
-          </div>
-
-          <div class="card">
-            <div class="card-label">Director</div>
-            <p>Darryl Morley</p>
-          </div>
-
-          <div class="card card-full">
-            <div class="card-label">Company</div>
-            <p>
-              Bitmoor Ltd &middot; Registered in England and Wales &middot;
-              <a href="https://find-and-update.company-information.service.gov.uk/company/17133695" target="_blank" rel="noopener">Company number 17133695</a>
-            </p>
-            <div class="status">
-              <span class="status-dot"></span>
-              Active
-            </div>
-          </div>
+      <div class="hero pad">
+        <p class="tag reveal"><span class="idx">BM-17133695</span> / Software development, UK</p>
+        <h1 class="reveal d1">Backend systems that <span class="accent">hold up</span>.</h1>
+        <p class="reveal d2">
+          Bitmoor is the development company of Darryl Morley. APIs, ecommerce
+          platforms, payment flows and the integrations that glue them together.
+          Built in TypeScript, Laravel and Go, shipped in containers.
+        </p>
+        <div class="hero-meta reveal d3">
+          <span class="live"><span class="dot"></span>Available for work</span>
+          <span>GMT / United Kingdom</span>
+          <span>EST. 2026</span>
         </div>
       </div>
+
+      <section id="services">
+        <div class="section-head pad">
+          <p class="tag"><span class="idx">01</span> / Services</p>
+          <span class="hint">what we build</span>
+        </div>
+        <div class="services">
+          <div class="service">
+            <span class="num">01.1</span>
+            <h3>Backend engineering</h3>
+            <p>Services, queues, schedulers and data pipelines. The unglamorous machinery that keeps a business running while everyone's asleep.</p>
+            <div class="tools"><span>TypeScript</span><span>Node.js</span><span>Laravel</span><span>Go</span><span>PostgreSQL</span><span>Redis</span></div>
+          </div>
+          <div class="service">
+            <span class="num">01.2</span>
+            <h3>APIs &amp; integrations</h3>
+            <p>REST APIs designed properly, and third-party systems wired together so data ends up where it should. EPOS, couriers, marketplaces, CRMs.</p>
+            <div class="tools"><span>REST</span><span>Webhooks</span><span>Lightspeed</span><span>OAuth</span><span>Custom</span></div>
+          </div>
+          <div class="service">
+            <span class="num">01.3</span>
+            <h3>Ecommerce</h3>
+            <p>Storefronts backed by real inventory systems. Product data, search, SEO plumbing and the sync jobs that keep stock honest. Built on years of running retail ecommerce day-to-day.</p>
+            <div class="tools"><span>Next.js</span><span>Astro.js</span><span>Laravel</span><span>SEO</span><span>Inventory sync</span></div>
+          </div>
+          <div class="service">
+            <span class="num">01.4</span>
+            <h3>Payments</h3>
+            <p>Checkout flows, subscriptions and webhook handling that reconciles cleanly. Money is the one place "mostly works" doesn't cut it.</p>
+            <div class="tools"><span>Stripe</span><span>Worldpay</span><span>Barclays EPDQ</span><span>Custom</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="strip pad">
+        TypeScript <b>/</b> Go <b>/</b> Laravel <b>/</b> Next.js <b>/</b> Astro <b>/</b> PostgreSQL <b>/</b> Redis <b>/</b> Stripe <b>/</b> Docker <b>/</b> Cloudflare
+      </div>
+
+      <section id="work">
+        <div class="section-head pad">
+          <p class="tag"><span class="idx">02</span> / Work</p>
+          <span class="hint">things we've shipped</span>
+        </div>
+        <div class="work-grid">
+          <a class="work" href="https://www.whatcable.uk" target="_blank" rel="noopener">
+            <span class="arrow">&#8599;</span>
+            <p class="tag">Product / macOS</p>
+            <h3>WhatCable</h3>
+            <p>A macOS app that tells you what your USB-C cable can actually do, instead of what the listing claimed.</p>
+            <p class="url">whatcable.uk</p>
+          </a>
+          <a class="work" href="https://www.darrylmorley.co.uk" target="_blank" rel="noopener">
+            <span class="arrow">&#8599;</span>
+            <p class="tag">Personal / Portfolio</p>
+            <h3>Darryl Morley</h3>
+            <p>The person behind the company. Writing, projects and the front-of-house side of the work.</p>
+            <p class="url">darrylmorley.co.uk</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="contact pad" id="contact">
+        <p class="tag"><span class="idx">03</span> / Contact</p>
+        <h2 style="margin-top: 24px;">Got a system that needs building?</h2>
+        <a class="cta" href="mailto:hello@bitmoor.co.uk">hello@bitmoor.co.uk &#8594;</a>
+      </section>
     </main>
 
-    <footer>
-      <div class="container">
-        <div class="footer-inner">
-          <p>&copy; 2025 Bitmoor Ltd</p>
-          <a href="https://find-and-update.company-information.service.gov.uk/company/17133695" target="_blank" rel="noopener">Companies House</a>
-        </div>
-      </div>
+    <footer class="pad">
+      <span>&copy; 2026 Bitmoor Ltd</span>
+      <span>Registered in England and Wales</span>
+      <a href="https://find-and-update.company-information.service.gov.uk/company/17133695" target="_blank" rel="noopener">Company no. 17133695</a>
     </footer>
   </div>
 </body>
